@@ -18,7 +18,9 @@ const Signup = () => {
       localStorage.removeItem("userName");
 
       // Send POST request to signup
-      await axios.post("http://localhost:5000/api/signup", form);
+      const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+      await axios.post(`${API_URL}/api/signup`, form);
+
 
       alert("Signup successful!");
       navigate("/login");
