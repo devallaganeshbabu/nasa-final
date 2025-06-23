@@ -5,7 +5,7 @@ function Home() {
   const [apod, setApod] = useState(null);
 
   useEffect(() => {
-    axios.get('http://localhost:5000/api/apod').then(res => setApod(res.data));
+    axios.get(`${process.env.REACT_APP_API_URL}/api/apod`).then(res => setApod(res.data));
   }, []);
 
   if (!apod) return <p>Loading...</p>;
