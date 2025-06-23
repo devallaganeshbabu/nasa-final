@@ -3,6 +3,8 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const Login = ({ setUser }) => {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -14,7 +16,7 @@ const Login = ({ setUser }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
-      const res = await axios.post("http://localhost:5000/api/login", form);
+      const res = await axios.post(`${API_URL}/api/login`, form);
       const name = res.data.name;
       localStorage.setItem("userName", name);
       setUser(name);
@@ -27,29 +29,3 @@ const Login = ({ setUser }) => {
   };
 
   return (
-    <div className="auth-container">
-      <form className="auth-form" onSubmit={handleLogin}>
-        <h1 className="nasa-heading">🚀 NASA App</h1>
-        <h2>Login</h2>
-        <input
-          type="email"
-          name="email"
-          placeholder="Email"
-          onChange={handleChange}
-          required
-        />
-        <input
-          type="password"
-          name="password"
-          placeholder="Password"
-          onChange={handleChange}
-          required
-        />
-        <button type="submit">Login</button>
-        <p>New user? <Link to="/signup">Signup</Link></p>
-      </form>
-    </div>
-  );
-};
-
-export default Login;
