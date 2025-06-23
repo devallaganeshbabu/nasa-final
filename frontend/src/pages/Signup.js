@@ -3,6 +3,8 @@ import { Link, useNavigate } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
 
+const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
+
 const Signup = () => {
   const [form, setForm] = useState({ name: "", email: "", password: "" });
   const navigate = useNavigate();
@@ -14,13 +16,9 @@ const Signup = () => {
   const handleSignup = async (e) => {
     e.preventDefault();
     try {
-      // Clear any existing session
       localStorage.removeItem("userName");
 
-      // Send POST request to signup
-      await axios.post("http://localhost:5000/api/signup", form);
-
-
+      await axios.post(`${API_URL}/api/signup`, form);
 
       alert("Signup successful!");
       navigate("/login");
