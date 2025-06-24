@@ -1,3 +1,5 @@
+// backend/index.js
+
 const express = require("express");
 const mongoose = require("mongoose");
 const axios = require("axios");
@@ -21,13 +23,12 @@ mongoose.connect(MONGO_URI, {
   useNewUrlParser: true,
   useUnifiedTopology: true,
 })
-.then(() => console.log("✅ MongoDB connected"))
-.catch((err) => console.error("❌ MongoDB connection error:", err));
+  .then(() => console.log("✅ MongoDB connected"))
+  .catch((err) => console.error("❌ MongoDB connection error:", err));
 
-// === Signup Route ===
+// === User Signup ===
 app.post("/api/signup", async (req, res) => {
   const { name, email, password } = req.body;
-
   try {
     const existingUser = await User.findOne({ email });
     if (existingUser)
@@ -44,23 +45,19 @@ app.post("/api/signup", async (req, res) => {
   }
 });
 
-// === Login Route (Secure Version) ===
+// === User Login ===
 app.post("/api/login", async (req, res) => {
   const { email, password } = req.body;
-
   try {
     const user = await User.findOne({ email });
-    if (!user) {
+    if (!user)
       return res.status(401).json({ message: "Invalid email or password" });
-    }
 
     const isMatch = await bcrypt.compare(password, user.password);
-    if (!isMatch) {
+    if (!isMatch)
       return res.status(401).json({ message: "Invalid email or password" });
-    }
 
-    // ✅ Return only the user's name for frontend use
-    res.status(200).json({ message: "Login successful", name: user.name });
+    res.status(200).json({ message: "Login successful", user: { name: user.name } });
   } catch (error) {
     console.error("Login error:", error);
     res.status(500).json({ message: "Login failed" });
@@ -68,8 +65,6 @@ app.post("/api/login", async (req, res) => {
 });
 
 // === NASA API Routes ===
-
-// APOD
 app.get("/api/apod", async (req, res) => {
   try {
     const response = await axios.get(
@@ -81,7 +76,6 @@ app.get("/api/apod", async (req, res) => {
   }
 });
 
-// Mars Rover Photos
 app.get("/api/mars", async (req, res) => {
   try {
     const response = await axios.get(
@@ -93,7 +87,6 @@ app.get("/api/mars", async (req, res) => {
   }
 });
 
-// NeoWs
 app.get("/api/neo", async (req, res) => {
   try {
     const response = await axios.get(
@@ -105,7 +98,6 @@ app.get("/api/neo", async (req, res) => {
   }
 });
 
-// EPIC
 app.get("/api/epic", async (req, res) => {
   try {
     const response = await axios.get(
