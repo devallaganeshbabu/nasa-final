@@ -3,8 +3,6 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
 
-// No need for API_URL here, just use relative paths
-
 const Login = ({ setUser }) => {
   const [form, setForm] = useState({ email: "", password: "" });
   const navigate = useNavigate();
@@ -15,13 +13,17 @@ const Login = ({ setUser }) => {
 
   const handleLogin = async (e) => {
     e.preventDefault();
+
     try {
-      const res = await axios.post("/auth/login", form);  // <-- relative path
-      const name = res.data.user?.name || "User";         // make sure to get name properly
+      const res = await axios.post("http://localhost:5000/api/login", form); // ✅ Full URL for dev
+      const name = res.data.user?.name || "User";
+
+      // Save user to localStorage and app state
       localStorage.setItem("userName", name);
       setUser(name);
+
       alert("Login successful!");
-      navigate("/dashboard");
+      navigate("/dashboard"); // redirect after login
     } catch (err) {
       console.error(err.response?.data || err.message);
       alert("Login failed!");
@@ -33,6 +35,7 @@ const Login = ({ setUser }) => {
       <form className="auth-form" onSubmit={handleLogin}>
         <h1 className="nasa-heading">🚀 NASA App</h1>
         <h2>Login</h2>
+
         <input
           type="email"
           name="email"
@@ -40,6 +43,22 @@ const Login = ({ setUser }) => {
           onChange={handleChange}
           required
         />
+
         <input
           type="password"
           name="password"
+          placeholder="Password"
+          onChange={handleChange}
+          required
+        />
+
+        <button type="submit">Login</button>
+        <p>
+          Don’t have an account? <Link to="/signup">Sign Up</Link>
+        </p>
+      </form>
+    </div>
+  );
+};
+
+export default Login;
