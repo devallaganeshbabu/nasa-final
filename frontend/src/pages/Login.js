@@ -3,6 +3,7 @@ import { useNavigate, Link } from "react-router-dom";
 import axios from "axios";
 import "./Auth.css";
 
+// Use backend URL from .env or fallback to localhost
 const API_URL = process.env.REACT_APP_API_URL || "http://localhost:5000";
 
 const Login = ({ setUser }) => {
@@ -16,15 +17,17 @@ const Login = ({ setUser }) => {
   const handleLogin = async (e) => {
     e.preventDefault();
     try {
+      console.log("Sending login request to:", `${API_URL}/auth/login`);
       const res = await axios.post(`${API_URL}/auth/login`, form);
-      const name = res.data.name;
+      
+      const name = res.data.user?.name || res.data.name || "User";
       localStorage.setItem("userName", name);
       setUser(name);
       alert("Login successful!");
       navigate("/dashboard");
     } catch (err) {
-      console.error(err.response?.data || err.message);
-      alert("Login failed!");
+      console.error("Login error:", err.response?.data || err.message);
+      alert(err.response?.data?.error || "Login failed. Please try again.");
     }
   };
 
