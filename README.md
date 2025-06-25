@@ -15,7 +15,7 @@ A full-stack web application that utilizes NASA's Open APIs to provide users wit
 
 ## 🧠 Key Features
 
-- 🌠 Astronomy Picture of the Day (APOD)
+- 🌠 Astronomy Picture of the Day (APOD)_
 - 🚗 Mars Rover Photos Viewer
 - 🌍 EPIC Earth Images Explorer
 - ☄️ Near-Earth Object Tracker
